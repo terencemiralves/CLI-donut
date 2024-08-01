@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -Wvla -std=c99 -pedantic
+CFLAGS = -Wall -Wextra -Werror -Wvla -std=c99 -pedantic -D_POSIX_C_SOURCE=199309L
 
 OBJ = main.o
 BIN = donut
