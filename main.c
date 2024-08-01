@@ -5,7 +5,9 @@
 #include <fcntl.h>
 #include <time.h>
 #include <errno.h>
+#include <stdlib.h>
 #include "msg.h"
+#include "render.h"
 
 struct termios oldt;
 
@@ -93,6 +95,7 @@ int main()
                 msg.stop = 1;
                 write(pipedfd[1], &msg, sizeof(msg));
                 close(pipedfd[1]);
+                exit(0);
             }
             else if (c == 'l' || c == 'j')
             {
@@ -117,12 +120,9 @@ int main()
         // parent
         while (!msg.stop)
         {
-            printf("Press j or l to change the size, a or d to change the speed and c to close\n");
-            for (int i = 0; i < msg.size; i++)
-                printf("-");
-            printf("\n");
-            printf("time: %f\n", msg.time);
             read(pipedfd[0], &msg, sizeof(msg));
+            render(msg.size);
+            printf("Press j or l to change the size, a or d to change the speed and c to close\n size = %i", msg.size);
             if (msg.stop)
                 break;
             msleep(msg.time * 1000);
