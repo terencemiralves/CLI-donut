@@ -106,7 +106,7 @@ int main()
             }
             else if (c == 'a' || c == 'd')
             {
-                msg.time += c == 'd' ? 0.1 : -0.1;
+                msg.time += c == 'd' ? 0.001 : -0.001;
                 if (msg.time < 0.0)
                     msg.time = 0.0;
                 if (msg.time > 5.0)
@@ -122,7 +122,7 @@ int main()
         {
             read(pipedfd[0], &msg, sizeof(msg));
             render(msg.size);
-            printf("Press j or l to change the size, a or d to change the speed and c to close\n size = %i", msg.size);
+            printf("Speed: %f\nSize: %i\nPress j or l to change the size, a or d to change the speed and c to close\n", msg.time, msg.size);
             if (msg.stop)
                 break;
             msleep(msg.time * 1000);
