@@ -16,4 +16,4 @@ How to use:
 
 3. The commands are a and d to change the speed and j and l for the size of the donut.
 
-4. DO NOT FORGET TO USE C TO CLOSE THE PROGRAM AND NOT WITH OTHER MEANS (to close the fork).
+4. DO NOT FORGET TO USE C TO CLOSE THE PROGRAM AND NOT WITH OTHER MEANS (to close the fork and to reset the terminal setting).
