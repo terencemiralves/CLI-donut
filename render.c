@@ -76,7 +76,6 @@ int k;
 
 void render(int size)
 {
-    float scale = size / 45;
     float z[1760];
     char b[1760];
     printf("\x1b[2J");
@@ -97,8 +96,8 @@ void render(int size)
             float m = cos(B);
             float n = sin(B);
             float t = c * h * g - f * e;
-            int x = (int) (scale + 40 + 30 * D * (l * h * m - t * n));
-            int y= (int) (scale + 12 + 15 * D * (l * h * n + t * m));
+            int x = (int) (40 + size * D * (l * h * m - t * n));
+            int y= (int) (12 + (size / 2) * D * (l * h * n + t * m));
             int o = x + 80 * y;
             int N = 8 * ((f * e - c * d * g) * m - c * d * e - f * g - l * d * n);
             if(22 > y && y > 0 && x > 0 && 80 > x && D > z[o]) {

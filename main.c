@@ -60,7 +60,7 @@ int main()
     int pipedfd[2];
     pid_t pid;
     struct msg msg;
-    msg.size = 5;
+    msg.size = 1;
     msg.time = 0.1;
     msg.stop = 0;
 
