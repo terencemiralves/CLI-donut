@@ -1,75 +1,11 @@
 #include "render.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 #include <string.h>
-
-const float theta_spacing = 0.07;
-const float phi_spacing = 0.02;
 
 const float R1 = 1;
 const float R2 = 2;
 const float K2 = 5;
-/*
-char *render(float A, float B, int size)
-{
-    const float K1 = size*K2*3/(R1+R2);
-    float cosA = cos(A);
-    float cosB = cos(B);
-    float sinA = sin(A);
-    float sinB = sin(B);
-    
-    char *output = malloc(size*size);
-    *output = ' ';
-    float **zbuffer = malloc(sizeof(float*) * size);
-    for (int i = 0; i < size; i++)
-        zbuffer[i] = calloc(size, sizeof(float));
-
-    for (float theta = 0.0; theta < 2 * 3.14; theta += theta_spacing)
-    {
-        float costheta = cos(theta);
-        float sintheta = sin(theta);
-
-        for (float phi = 0; phi < 2 * 3.14; phi += phi_spacing)
-        {
-            float cosphi = cos(phi);
-            float sinphi = sin(phi);
-
-            float circlex = R2 + R1*costheta;
-            float circley = R1*sintheta;
-
-            float x = circlex * (cosB * cosphi + sinA * sinB * sinphi) - circley * cosA * sinB;
-            float y = circlex * (cosB * cosphi - sinA * sinB * sinphi) + circley * cosA * sinB;
-            float z = K2 + cosA * circlex * sinphi + circley * sinA;
-            float ooz = 1/z;
-
-            int xp = (int) ((size / 2) + (K1 * ooz * x));
-            int yp = (int) ((size / 2) - (K1 * ooz * y));
-
-            float L = cosphi * costheta * sinB - cosA * costheta * sinphi - sinA * sintheta + cosB * (cosA * sintheta - costheta * sinA * sinphi);
-
-            if (L > 0)
-            {
-                printf("%i-%i\n", xp, yp);
-                if  (ooz > zbuffer[xp][yp])
-                {
-                    zbuffer[xp][yp] = ooz;
-                    int luminance_index = L*8;
-                    output[(xp * size) + yp] = ".,-~:;=!*#$@"[luminance_index];
-                }
-            }
-        }
-    }
-    //place the new lines and free zbuffer
-    for (int i = 0; i < size; i++)
-    {
-        output[(size * i) + size] = '\n';
-        free(zbuffer[i]);
-    }
-    free(zbuffer);
-    return output;
-}
-*/
 float A = 0, B = 0;
 float i, j;
 int k;

@@ -57,10 +57,13 @@ void reset_terminal()
 
 int main() 
 {
+    //Setup the PID stuff
     int pipedfd[2];
     pid_t pid;
+
+    //Create the msg structure that will be used to pass info between the fork and the main program
     struct msg msg;
-    msg.size = 1;
+    msg.size = 10;
     msg.time = 0.1;
     msg.stop = 0;
 
@@ -73,8 +76,10 @@ int main()
     //Set the read end of the pipe to non-blocking mode this way I can print without waiting for input
     fcntl(pipedfd[0], F_SETFL, O_NONBLOCK);
 
+    //Set the input reading to not need to press the enter button
     set_nonblocking_input();
 
+    //fork
     pid = fork();
 
     if (pid == -1)
@@ -85,11 +90,13 @@ int main()
 
     if (pid == 0)
     {
-        //in the child read the inputs
+        //In the child read the inputs
         close(pipedfd[0]);
+        //Main while loop to read the input and process it
         while (1)
         {
             char c = getchar();
+            //To stop
             if (c == 'c')
             {
                 msg.stop = 1;
@@ -97,6 +104,7 @@ int main()
                 close(pipedfd[1]);
                 exit(0);
             }
+            //To change the size of the donut
             else if (c == 'l' || c == 'j')
             {
                 msg.size += c == 'l' ? 1 : -1;
@@ -104,13 +112,14 @@ int main()
                     msg.size = 0;
                 write(pipedfd[1], &msg, sizeof(msg));
             }
+            //To change the rotation speed
             else if (c == 'a' || c == 'd')
             {
-                msg.time += c == 'd' ? 0.001 : -0.001;
-                if (msg.time < 0.0)
-                    msg.time = 0.0;
-                if (msg.time > 5.0)
-                    msg.time = 5.0;
+                msg.time += c == 'a' ? 0.015 : -0.015;
+                if (msg.time <= 0.0)
+                    msg.time = 0.005;
+                if (msg.time > 1.0)
+                    msg.time = 1.0;
                 write(pipedfd[1], &msg, sizeof(msg));
             }
         }
@@ -120,15 +129,26 @@ int main()
         // parent
         while (!msg.stop)
         {
+            //read what the fork just sent
             read(pipedfd[0], &msg, sizeof(msg));
+            //create a speedometer
+            char speed[11] = "          ";
+            for (int i = 0; i < (int) (10 - (msg.time + 0.005) * 10); i++)
+                speed[i] = 'X';
+            //check for max value
+            if (msg.time <= 0.009)
+                speed[9] = 'X';
+            //print the donut image
             render(msg.size);
-            printf("Speed: %f\nSize: %i\nPress j or l to change the size, a or d to change the speed and c to close\n", msg.time, msg.size);
+            //print the dashboard
+            printf("Speed: [%s]\nSize: %i\nPress j or l to change the size, a or d to change the speed and c to close\n", speed, msg.size);
             if (msg.stop)
                 break;
+            //sleep
             msleep(msg.time * 1000);
         } 
     }
-
+    //Reset the terminal in order to not block it because of the new settings that we setted for the input reading
     reset_terminal();
     return 0;
 }
